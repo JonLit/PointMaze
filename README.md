@@ -24,13 +24,18 @@ Android lässt aus Sicherheitsgründen standartmäßig keiner App (außer Google
 PC:
 
 Windows:
-Noch nicht verfügbar
+1. PointMazeSetup.exe (bzw. PointMazeSetup32.exe) herunterladen
+2. PointMazeSetup.exe öffnen
 
 Linux:
-Noch nicht verfügbar
+1. PointMazeLinux64.zip (bzw. PointMazeLinux32.zip) herunterladen
+2. Datei entpacken
+3. Point_Maze_PC ausführen
 
 macOS:
-Noch nicht verfügbar
+1. PointMazeMac.zip herunterladen
+2. Datei eintpacken
+3. Point_Maze_PC.app ausführen
 
 
 PointMaze ist leider noch nicht für iOS verfügbar...
