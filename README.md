@@ -10,7 +10,7 @@ bis Android 7.0
 1. Einstellungen -> Sicherheit -> Unbekannte Herkunft muss aktiviert sein (siehe unten)
 2. PointMaze.apk herunterladen
 3. PointMaze.apk öffnen
-(4. Einstellungen -> Sicherheit -> Unbekannte Herkungt kann wieder deaktiviert werden)
+(4. Einstellungen -> Sicherheit -> Unbekannte Herkunft kann wieder deaktiviert werden)
 
 ab Android 8.0
 1. PointMaze.apk herunterladen
