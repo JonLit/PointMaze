@@ -7,7 +7,7 @@ Ein kleines Spiel für Android-Geräte, PCs und Macs
 Android:
 
 bis Android 7.0
-1. Einstellungen -> Sicherheit -> Unbekannte Herkunft muss aktiviert sein*
+1. Einstellungen -> Sicherheit -> Unbekannte Herkunft muss aktiviert sein (siehe unten)
 2. PointMaze.apk herunterladen
 3. PointMaze.apk öffnen
 (4. Einstellungen -> Sicherheit -> Unbekannte Herkungt kann wieder deaktiviert werden)
@@ -19,4 +19,19 @@ ab Android 8.0
 4. PointMaze installieren
 (5. Unbek. Apps installieren deaktivieren)
 
-* Android lässt aus Sicherheitsgründen standartmäßig keiner App (außer Google PlayStore) die Installation von Apps zu.
+Android lässt aus Sicherheitsgründen standartmäßig keiner App (außer Google PlayStore) die Installation von Apps zu.
+
+PC:
+
+Windows:
+1. PointMaze.exe herunterladen
+2. PointMaze.exe ausführen
+
+Linux:
+(Anleitung wird demnächst hinzugefügt)
+
+macOS:
+(Anleitung wird demnächst hinzugefügt)
+
+
+PointMaze ist leider noch nicht für iOS verfügbar...
