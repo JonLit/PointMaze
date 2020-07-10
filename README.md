@@ -24,11 +24,11 @@ Android lässt aus Sicherheitsgründen standardmäßig keiner App (außer Google
 PC:
 
 Windows:
-1. PointMazeSetup.exe (bzw. PointMazeSetup32.exe) herunterladen
+1. PointMazeSetup.exe (bzw. PointMazeSetup64.exe) herunterladen
 2. PointMazeSetup.exe öffnen
 
 Linux:
-1. PointMazeLinux64.zip (bzw. PointMazeLinux32.zip) herunterladen
+1. PointMazeLinux64.zip (bzw. PointMazeLinux64.zip) herunterladen
 2. Datei entpacken
 3. Point_Maze_PC ausführen
 
