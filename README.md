@@ -39,3 +39,7 @@ macOS:
 
 
 PointMaze ist leider noch nicht für iOS verfügbar...
+
+# Beta
+
+Die Betaversion funktioniert im moment nur auf Windows, android hat probleme mit den Dateipfad-strings...
