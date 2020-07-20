@@ -19,7 +19,7 @@ ab Android 8.0
 4. PointMaze installieren
 (5. Unbek. Apps installieren deaktivieren)
 
-Android lässt aus Sicherheitsgründen standardmäßig keiner App (außer Google PlayStore) die Installation von Apps zu.
+*Android lässt aus Sicherheitsgründen standardmäßig keiner App (außer Google PlayStore) die Installation von Apps zu.
 
 PC:
 
