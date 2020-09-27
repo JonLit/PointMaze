@@ -107,19 +107,29 @@ void settings_()
     }
     fill(255);
     text(backgroundB, 170, 335);
+    
+    text("Vibration", 250, 65);
+    
+    arc(295, 260, 30, 30, radians(0), radians(180));
+    rect(280, 180, 30, 80);
+    arc(295, 180, 30, 30, radians(180), radians(360));
+    strokeWeight(2);
+    stroke(0);
+    ellipse(295, vibrateSwitch, 70, 70);
   }
   
-  if(pause && !settings && !start)
+  if(pause == true && settings == false && start == false)
   {
     fill(255);
     strokeJoin(ROUND);
-    triangle(width - 35, 10, width - 35, 40, width - 10, 25);
+    strokeWeight(4);
+    triangle(width - 70, 20, width - 70, 80, width - 20, 50);
     //reset();
   }
-  else if(!pause && !settings && !start)
+  else if(pause == false && settings == false && start == false)
   {
-    line(width - 30, 15, width - 30, 35);
-    line(width - 20, 15, width - 20, 35);
+    line(width - 60, 30, width - 60, 70);
+    line(width - 40, 30, width - 40, 70);
     
     if(debug == true)
     {
@@ -127,5 +137,6 @@ void settings_()
       textSize(10);
       text(round(frameRate), 0, 10);
     }
+    strokeWeight(2);
   }
 }
