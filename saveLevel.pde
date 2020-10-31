@@ -1,5 +1,5 @@
 void saveLevel()
-{
+{/*
   save[0] = str(debug);
   save[1] = hex(tStrokeColor);
   save[2] = hex(tFillColor);
@@ -12,5 +12,5 @@ void saveLevel()
   save[9] = str(backgroundB);
   save[10] = str(q);
   save[11] = str(level);
-  saveStrings(dataPath("") + "\\save.txt", save);
+  saveStrings(dataPath("") + "\\save.txt", save);*/
 }

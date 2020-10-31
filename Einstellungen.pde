@@ -110,16 +110,21 @@ void settings_()
   }
   
   if(pause && !settings && !start)
-  {
+  {/*
     fill(255);
     strokeJoin(ROUND);
     triangle(width - 35, 10, width - 35, 40, width - 10, 25);
     //reset();
+    */
+    pauseButton = new button(width-100, 0, 100, 100, "pause_button_pause.png", 1);
   }
   else if(!pause && !settings && !start)
-  {
+  {/*
     line(width - 30, 15, width - 30, 35);
     line(width - 20, 15, width - 20, 35);
+    */
+    
+    pauseButton = new button(width-100, 0, 100, 100, "pause_button_running.png", 1);
     
     if(debug == true)
     {
