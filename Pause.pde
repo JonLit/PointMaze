@@ -32,6 +32,6 @@ void pause()
     text(":", 140, 25+14*s);
     text("Kreis wird zurückgesetzt", 190, 25+14*s);
     textSize(14);
-    text("PointMazePC v1.9.5", 10, height-25);
+    text("PointMazePC v1.9.6", 10, height-25);
   }
 }

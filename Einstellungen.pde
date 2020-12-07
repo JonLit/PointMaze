@@ -1,7 +1,12 @@
-boolean settings = false;
-
 void settings_()
 {
+  button settingsButtonRedPlus = new button(10, 145, 70, 70, color(#ff0000), color(#ffffff), "plus_sign_41x41.png");
+  button settingsButtonRedMinus = new button(10, 225, 70, 70, color(#ff0000), color(#ffffff), "minus_sign_41x11.png");
+  button settingsButtonGreenPlus = new button(90, 145, 70, 70, color(#00ff00), color(#ffffff), "plus_sign_41x41.png");
+  button settingsButtonGreenMinus = new button(90, 225, 70, 70, color(#00ff00), color(#ffffff), "minus_sign_41x11.png");
+  button settingsButtonBluePlus = new button(170, 145, 70, 70, color(#0000ff), color(#ffffff), "plus_sign_41x41.png");
+  button settingsButtonBlueMinus = new button(170, 225, 70, 70, color(#0000ff), color(#ffffff), "minus_sign_41x11.png");
+  
   if(settings == true)
   {
     stroke(255);
@@ -14,117 +19,128 @@ void settings_()
     
     text("Hintergrund", 10, 105);
     
-    fill(#ff0000);
-    rect(10, 145, 70, 70);
-    strokeWeight(10);
-    stroke(255);
-    line(45, 165, 45, 195);
-    line(30, 180, 60, 180);
-    if (mousePressed && mouseX < 80 && mouseX > 10 && mouseY < 215 && mouseY > 145)
+    settingsButtonRedPlus.activate();
+    settingsButtonRedMinus.activate();
+    settingsButtonGreenPlus.activate();
+    settingsButtonGreenMinus.activate();
+    settingsButtonBluePlus.activate();
+    settingsButtonBlueMinus.activate();
+    if (!reset)
     {
-      backgroundR++;
+      if (settingsButtonRedPlus.isPressed())
+      {
+        backgroundR++;
+      }
+      if (settingsButtonRedMinus.isPressed())
+      {
+        backgroundR--;
+      }
+      if (settingsButtonGreenPlus.isPressed())
+      {
+        backgroundG++;
+      }
+      if (settingsButtonGreenMinus.isPressed())
+      {
+        backgroundG--;
+      }
+      if (settingsButtonBluePlus.isPressed())
+      {
+        backgroundB++;
+      }
+      if (settingsButtonBlueMinus.isPressed())
+      {
+        backgroundB--;
+      }
+      
+      if (backgroundG < 0)
+      {
+        backgroundG = 0;
+      }
+      if (backgroundG > 255)
+      {
+        backgroundG = 255;
+      }
+      if (backgroundR < 0)
+      {
+        backgroundR = 0;
+      }
+      if (backgroundR > 255)
+      {
+        backgroundR = 255;
+      }
+      if (backgroundB < 0)
+      {
+        backgroundB = 0;
+      }
+      if (backgroundB > 255)
+      {
+        backgroundB = 255;
+      }
     }
-    strokeWeight(3);
-    fill(#ff0000);
-    rect(10, 225, 70, 70);
-    strokeWeight(10);
-    stroke(255);
-    line(30, 260, 60, 260);
-    strokeWeight(3);
-    if (mousePressed && mouseX < 80 && mouseX > 10 && mouseY < 295 && mouseY > 225)
-    {
-      backgroundR--;
-    }
-    if (backgroundR < 0)
-    {
-      backgroundR = 0;
-    }
-    if (backgroundR > 255)
-    {
-      backgroundR = 255;
-    }
+    
     fill(255);
     text(backgroundR, 10, 335);
-    
-    fill(#00ff00);
-    rect(90, 145, 70, 70);
-    if (mousePressed && mouseX < 160 && mouseX > 90 && mouseY < 215 && mouseY > 145)
-    {
-      backgroundG++;
-    }
-    strokeWeight(10);
-    stroke(255);
-    line(125, 165, 125, 195);
-    line(110, 180, 140, 180);
-    fill(#00ff00);
-    strokeWeight(3);
-    rect(90, 225, 70, 70);
-    strokeWeight(10);
-    stroke(255);
-    fill(#00ff00);
-    line(110, 260, 140, 260);
-    strokeWeight(3);
-    if (mousePressed && mouseX < 160 && mouseX > 90 && mouseY < 295 && mouseY > 225)
-    {
-      backgroundG--;
-    }
-    if (backgroundG < 0)
-    {
-      backgroundG = 0;
-    }
-    if (backgroundG > 255)
-    {
-      backgroundG = 255;
-    }
-    fill(255);
     text(backgroundG, 90, 335);
-    
-    fill(#0000ff);
-    rect(170, 145, 70, 70);
-    if (mousePressed && mouseX < 230 && mouseX > 170 && mouseY < 215 && mouseY > 145)
-    {
-      backgroundB++;
-    }
-    fill(#0000ff);
-    rect(170, 225, 70, 70);
-    strokeWeight(10);
-    stroke(255);
-    line(205, 165, 205, 195);
-    line(190, 180, 220, 180);
-    line(190, 260, 220, 260);
-    strokeWeight(3);
-    if (mousePressed && mouseX < 230 && mouseX > 170 && mouseY < 295 && mouseY > 225)
-    {
-      backgroundB--;
-    }
-    if (backgroundB < 0)
-    {
-      backgroundB = 0;
-    }
-    if (backgroundB > 255)
-    {
-      backgroundB = 255;
-    }
-    fill(255);
     text(backgroundB, 170, 335);
+    
+    // Reset
+    if (!reset)
+    {
+      resetButton.activate();
+    }
+    if (resetButton.isPressed())
+    {
+      reset = true;
+    }
+    if (reset)
+    {
+      settingsButtonRedPlus.deactivate();
+      settingsButtonRedMinus.deactivate();
+      settingsButtonGreenPlus.deactivate();
+      settingsButtonGreenMinus.deactivate();
+      settingsButtonBluePlus.deactivate();
+      settingsButtonBlueMinus.deactivate();
+      resetButton.deactivate();
+      fill(#000000);
+      strokeJoin(ROUND);
+      rect(40, 40, width-80, height-80);
+      textAlign(LEFT, TOP);
+      text("WOLLEN SIE WIRKLICH DEN GESAMTEN SPIELSTAND UNWIEDERRUFLICH LÖSCHEN?", 80, 80);
+      println("resetConfirm");
+      resetConfirmButton.activate();
+      if (resetConfirmButton.isPressed())
+      {
+        save[0] = str(debug);
+        save[1] = hex(tStrokeColor);
+        save[2] = hex(tFillColor);
+        save[3] = hex(hStrokeColor);
+        save[4] = hex(hFillColor);
+        save[5] = hex(cStrokeColor);
+        save[6] = hex(cFillColor);
+        save[7] = str(backgroundR);
+        save[8] = str(backgroundG);
+        save[9] = str(backgroundB);
+        save[10] = str(q);
+        save[11] = "0";
+        saveStrings(dataPath("") + "\\save.txt", save);
+        loadLevel();
+        resetConfirmButton.deactivate();
+        reset = false;
+      }
+    }
   }
   
   if(pause && !settings && !start)
-  {/*
-    fill(255);
-    strokeJoin(ROUND);
-    triangle(width - 35, 10, width - 35, 40, width - 10, 25);
-    //reset();
-    */
-    pauseButton = new button(width-100, 0, 100, 100, "pause_button_pause.png", 1);
+  {
+    //pauseButton = new button(width-100, 0, 100, 100, "pause_button_pause.png", 1);
+    pauseButton.changeSymbol("pause_button_pause.png");
+    pauseButton.activate();
   }
   else if(!pause && !settings && !start)
-  {/*
-    line(width - 30, 15, width - 30, 35);
-    line(width - 20, 15, width - 20, 35);
-    */
-    
-    pauseButton = new button(width-100, 0, 100, 100, "pause_button_running.png", 1);
+  {
+    //pauseButton = new button(width-100, 0, 100, 100, "pause_button_running.png", 1);
+    pauseButton.changeSymbol("pause_button_running.png");
+    pauseButton.activate();
     
     if(debug == true)
     {
@@ -133,4 +149,10 @@ void settings_()
       text(round(frameRate), 0, 10);
     }
   }
+}
+
+
+void resetConfirm()
+{
+  
 }
