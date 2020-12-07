@@ -1,0 +1,13 @@
+{
+  "TargetFillColor": "FF00FF00",
+  "backgroundColorRed": 0,
+  "debug": false,
+  "ObstacleFillColor": "FFFF0000",
+  "ObstacleStrokeColor": "FFFF0000",
+  "CircleFillColor": "FFFFFFFF",
+  "backgroundColorGreen": 0,
+  "backgroundColorBlue": 0,
+  "CircleStrokeColor": "FFFFFFFF",
+  "Level": 0,
+  "TargetStrokeColor": "FF00FF00"
+}

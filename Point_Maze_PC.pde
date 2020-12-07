@@ -37,6 +37,9 @@ button resetConfirmButton;
 String[] save = new String[12];
 String[] load = new String[12];
 
+JSONObject saveObject = new JSONObject();
+JSONObject loadObject = new JSONObject();
+
 ArrayList<Level> levels = new ArrayList<Level>();
 int level = 0;
 

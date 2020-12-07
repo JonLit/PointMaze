@@ -1,5 +1,21 @@
 void loadLevel()
 {
+  loadObject = loadJSONObject("save.json");
+  debug = loadObject.getBoolean("debug");
+  tStrokeColor = unhex(loadObject.getString("TargetStrokeColor"));
+  tFillColor = unhex(loadObject.getString("TargetFillColor"));
+  hStrokeColor = unhex(loadObject.getString("ObstacleStrokeColor"));
+  hFillColor = unhex(loadObject.getString("ObstacleFillColor"));
+  cStrokeColor = unhex(loadObject.getString("CircleStrokeColor"));
+  cFillColor = unhex(loadObject.getString("CircleFillColor"));
+  backgroundR = loadObject.getInt("backgroundColorRed");
+  backgroundG = loadObject.getInt("backgroundColorGreen");
+  backgroundB = loadObject.getInt("backgroundColorBlue");
+  level = loadObject.getInt("Level");
+  
+  
+  //  OLD LOADING SYSTEM
+  /*
   load = loadStrings(dataPath("") + "\\save.txt");
   if (load != null)
   {
@@ -16,4 +32,5 @@ void loadLevel()
     q = int(load[10]);
     level = int(load[11]);
   }
+  */
 }

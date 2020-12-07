@@ -1,5 +1,20 @@
 void saveLevel()
 {
+  saveObject.setBoolean("debug", debug);
+  saveObject.setString("TargetStrokeColor", hex(tStrokeColor));
+  saveObject.setString("TargetFillColor", hex(tFillColor));
+  saveObject.setString("ObstacleStrokeColor", hex(hStrokeColor));
+  saveObject.setString("ObstacleFillColor", hex(hFillColor));
+  saveObject.setString("CircleStrokeColor", hex(cStrokeColor));
+  saveObject.setString("CircleFillColor", hex(cFillColor));
+  saveObject.setInt("backgroundColorRed", backgroundR);
+  saveObject.setInt("backgroundColorGreen", backgroundG);
+  saveObject.setInt("backgroundColorBlue", backgroundB);
+  saveObject.setInt("Level", level);
+  saveJSONObject(saveObject, "data/save.json");
+
+  //  OLD SAVE SYSTEM
+  /*
   save[0] = str(debug);
   save[1] = hex(tStrokeColor);
   save[2] = hex(tFillColor);
@@ -12,5 +27,6 @@ void saveLevel()
   save[9] = str(backgroundB);
   save[10] = str(q);
   save[11] = str(level);
-  saveStrings(dataPath("") + "\\save.txt", save);
+  saveStrings(dataPath("") + "save.txt", save);
+  */
 }
