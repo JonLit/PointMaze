@@ -38,4 +38,4 @@ macOS:
 3. Point_Maze_PC.app ausführen
 
 
-PointMaze ist leider noch nicht für iOS verfügbar...
+PointMaze wird leider nicht in absehbarer Zeit für iOS verfügbar sein, da Java leider nicht von iOS unterstützt wird.
