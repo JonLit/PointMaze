@@ -6,6 +6,8 @@ void settings_()
   button settingsButtonGreenMinus = new button(90, 225, 70, 70, color(#00ff00), color(#ffffff), "minus_sign_41x11.png");
   button settingsButtonBluePlus = new button(170, 145, 70, 70, color(#0000ff), color(#ffffff), "plus_sign_41x41.png");
   button settingsButtonBlueMinus = new button(170, 225, 70, 70, color(#0000ff), color(#ffffff), "minus_sign_41x11.png");
+  button serverModeSelectButton = new button(10, 500, 300, 100, color(#000000), color(#ffffff), color(#ffffff), "Server Modus");
+  button clientModeSelectButton = new button(10, 610, 300, 100, color(#000000), color(#ffffff), color(#ffffff), "Client Modus");
   
   if(settings == true)
   {
@@ -108,6 +110,7 @@ void settings_()
       text("WOLLEN SIE WIRKLICH DEN GESAMTEN SPIELSTAND UNWIEDERRUFLICH LÖSCHEN?", 80, 80);
       println("resetConfirm");
       resetConfirmButton.activate();
+      resetDeclineButton.activate();
       if (resetConfirmButton.isPressed())
       {
         saveObject.setBoolean("debug", debug);
@@ -126,6 +129,41 @@ void settings_()
         resetConfirmButton.deactivate();
         reset = false;
       }
+      else if(resetDeclineButton.isPressed())
+      {
+        reset = false;
+      }
+    }
+    
+    // Multiplayer
+    textAlign(TOP, LEFT);
+    text("Multiplayer Modus", 10, 470);
+    serverModeSelectButton.activate();
+    clientModeSelectButton.activate();
+    
+    if (serverModeSelectButton.isPressed())
+    {
+      if (client != null)
+      {
+        client.dispose();
+      }
+      server = new WebsocketServer(this, 8025, "/pointmaze");
+      client = null;
+      serverModeSelectButton.setFillColor(#0000ff);
+      clientModeSelectButton.setFillColor(#000000);
+      serverMode = "server";
+    }
+    else if (clientModeSelectButton.isPressed())
+    {
+      if (server != null)
+      {
+        server.dispose();
+      }
+      server = null;
+      client = new WebsocketClient(this, "ws://192.168.1.3:8025/pointmaze");
+      serverModeSelectButton.setFillColor(#000000);
+      clientModeSelectButton.setFillColor(#0000ff);
+      serverMode = "client";
     }
   }
   

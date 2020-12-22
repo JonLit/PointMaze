@@ -1,10 +1,13 @@
 /* Ersteller: Jonathan Litzelmann
  Mit freundlicher Unterstützung von Kai Krull*/
 
+import websockets.*;
 
 //Variablen
 float cX;
 float cY;
+float[] cClientX = new float[2];
+float[] cClientY = new float[2];
 boolean start = true;
 boolean debug = false;
 boolean settings = false;
@@ -23,6 +26,8 @@ int win = 0;
 int q = 30;
 int s = 25;
 int cRadius;
+String serverMode = "";
+String serverAdress = "192.168.1.1";
 PImage a;
 PImage b;
 PImage c;
@@ -32,10 +37,14 @@ button settingsButton;
 button pauseButton;
 button resetButton;
 button resetConfirmButton;
+button resetDeclineButton;
+
+WebsocketServer server;
+WebsocketClient client;
 
 
-String[] save = new String[12];
-String[] load = new String[12];
+//String[] save = new String[12];
+//String[] load = new String[12];
 
 JSONObject saveObject = new JSONObject();
 JSONObject loadObject = new JSONObject();
@@ -47,8 +56,8 @@ void setup()
 {
   loadLevel();
   
-  fullScreen();
-  //size(1920, 1080);
+  //fullScreen();
+  size(1920, 1080);
   frameRate(q);
   reset();
   orientation(LANDSCAPE);
@@ -79,7 +88,8 @@ void setup()
 
   resetButton = new button(50, height-150, 1000, 100, color(#000000), color(#ffffff), color(#ffffff), "GESAMTEN SPIELFORTSCHRITT LÖSCHEN");
   resetConfirmButton = new button(width-380, height-180, 300, 100, color(#000000), color(#ffffff), color(#ffffff), "JA, LÖSCHEN");
-
+  resetDeclineButton = new button(width-720, height-180, 300, 100, color(#000000), color(#ffffff), color(#ffffff), "NICHT LÖSCHEN");
+  
   ArrayList<Hindernis> h0 = new ArrayList<Hindernis>();
   ArrayList<Hindernis> h1 = new ArrayList<Hindernis>();
   ArrayList<Hindernis> h2 = new ArrayList<Hindernis>();
@@ -239,6 +249,17 @@ void draw()
   fill(cFillColor);
   stroke(cStrokeColor);
   ellipse(cX, cY, 0.5*s, 0.5*s);
+  
+  // Kreise von Mitspielern
+  fill(#550000);
+  stroke(#ffffff);
+  if (cClientX != null)
+  {
+    for (int i = 0; i < cClientX.length; i++)
+    {
+      ellipse(cClientX[i], cClientY[i], 0.5*s, 0.5*s);
+    }
+  }
 
   if (win > 0)
   {
@@ -251,53 +272,68 @@ void draw()
 
   if (start == true)
   {
-    strokeWeight(3);
-    stroke(255);
-    fill(0);
-    rect(0, 0, width-1, height-1);
-
-    fill(#ff0000);
-    textSize(100);
-    textAlign(CENTER, BOTTOM);
-    text("POINT MAZE", width/2, 100);
-    textAlign(CENTER, CENTER);
-    text("Klicken zum starten", width/2, height/2);
-    textAlign(LEFT, CENTER);
-
-    if (mousePressed && mouseX < width-100 && mouseY > 100)
-    {
-      start = false;
-    }
-    
-    // REINITIALIZING SOME BUTTONS
-    pauseButton.changePos(width-100, 0);
+    start_();
   }
-
+  
   pause();
-
+  
   settings_();
-
+  
   if (!settings && !start)
   {
     pauseButton.activate();
   }
-
+  
   if (pause == true && !start)
   {
     settingsButton.activate();
   }
-
+  
   if (debug == true)
   {
     text(timer, 10, 20);
   }
-
+  
   if (win <= 100 && win > 0)
   {
     if (level == levels.size()-1)
     {
       //image(c, 0, 0, 1280, 720);
     }
+  }
+  
+  // Multiplayer stuff
+  if (serverMode == "server")
+  {
+    server.sendMessage(str(cX) + ";" + str(cY));
+  }
+  else if (serverMode == "client")
+  {
+    client.sendMessage(str(cX) + ";" + str(cY));
+  }
+}
+
+void webSocketEvent(String msg)
+{
+  if (serverMode == "client")
+  {
+    String[] manage = new String[2];
+    println(msg);
+    manage = split(msg, ";");
+    cClientX[0] = float(manage[0]);
+    cClientY[0] = float(manage[1]);
+  }
+}
+
+void webSocketServerEvent(String msg) 
+{
+  if (serverMode == "server")
+  {
+    String[] manage = new String[2];
+    println(msg);
+    manage = split(msg, ";");
+    cClientX[0] = float(manage[0]);
+    cClientY[0] = float(manage[1]);
   }
 }
 

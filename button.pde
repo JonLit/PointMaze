@@ -158,7 +158,7 @@ class button //<>//
         if (sym.width > 0)
         {
           symbolLoaded = true;
-          println(symName + " loaded succesfully");
+          //println(symName + " loaded succesfully");
         }
       }
       
@@ -201,7 +201,7 @@ class button //<>//
   {
     this.symName = symbolName;
     sym = loadImage(symName);
-    println(symName + " loaded and changed succesfully");
+    //println(symName + " loaded and changed succesfully");
   }
   
   public void changePos(int xPos, int yPos)
