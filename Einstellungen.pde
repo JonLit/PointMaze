@@ -1,13 +1,16 @@
 void settings_()
 {
-  button settingsButtonRedPlus = new button(10, 145, 70, 70, color(#ff0000), color(#ffffff), "plus_sign_41x41.png");
-  button settingsButtonRedMinus = new button(10, 225, 70, 70, color(#ff0000), color(#ffffff), "minus_sign_41x11.png");
-  button settingsButtonGreenPlus = new button(90, 145, 70, 70, color(#00ff00), color(#ffffff), "plus_sign_41x41.png");
-  button settingsButtonGreenMinus = new button(90, 225, 70, 70, color(#00ff00), color(#ffffff), "minus_sign_41x11.png");
-  button settingsButtonBluePlus = new button(170, 145, 70, 70, color(#0000ff), color(#ffffff), "plus_sign_41x41.png");
-  button settingsButtonBlueMinus = new button(170, 225, 70, 70, color(#0000ff), color(#ffffff), "minus_sign_41x11.png");
-  button serverModeSelectButton = new button(10, 500, 300, 100, color(#000000), color(#ffffff), color(#ffffff), "Server Modus");
-  button clientModeSelectButton = new button(10, 610, 300, 100, color(#000000), color(#ffffff), color(#ffffff), "Client Modus");
+  Button settingsButtonRedPlus = new Button(10, 145, 70, 70, color(#ff0000), color(#ffffff), "plus_sign_41x41.png");
+  Button settingsButtonRedMinus = new Button(10, 225, 70, 70, color(#ff0000), color(#ffffff), "minus_sign_41x11.png");
+  Button settingsButtonGreenPlus = new Button(90, 145, 70, 70, color(#00ff00), color(#ffffff), "plus_sign_41x41.png");
+  Button settingsButtonGreenMinus = new Button(90, 225, 70, 70, color(#00ff00), color(#ffffff), "minus_sign_41x11.png");
+  Button settingsButtonBluePlus = new Button(170, 145, 70, 70, color(#0000ff), color(#ffffff), "plus_sign_41x41.png");
+  Button settingsButtonBlueMinus = new Button(170, 225, 70, 70, color(#0000ff), color(#ffffff), "minus_sign_41x11.png");
+  Button serverModeSelectButton = new Button(10, 500, 300, 100, color(#000000), color(#ffffff), color(#ffffff), "Server Modus");
+  Button clientModeSelectButton = new Button(320, 500, 300, 100, color(#000000), color(#ffffff), color(#ffffff), "Client Modus");
+  Button multiplayerStopButton = new Button(10, 610, 610, 100, color(#000000), color(#ffffff), color(#ffffff), "Multiplayer Beenden");
+  
+  
   
   if(settings == true)
   {
@@ -85,8 +88,137 @@ void settings_()
     text(backgroundG, 90, 335);
     text(backgroundB, 170, 335);
     
+    // Multiplayer
+    
+    textAlign(TOP, LEFT);
+    text("Multiplayer Modus", 10, 470);
+    if (serverMode != "server")
+    {
+      serverModeSelectButton.activate();
+    }
+    
+    if (serverMode != "client")
+    {
+      clientModeSelectButton.activate();
+    }
+    
+    if (serverModeSelectButton.isPressed() && serverMode != "server")
+    {
+      if (!serverStarting)
+      {
+        if (client != null)
+        {
+          client.dispose();
+        }
+        client = null;
+        thread("startWebSocketsServer");
+      }
+    }
+    if (serverStarting)
+    {
+      settingsButtonRedPlus.deactivate();
+      settingsButtonRedMinus.deactivate();
+      settingsButtonGreenPlus.deactivate();
+      settingsButtonGreenMinus.deactivate();
+      settingsButtonBluePlus.deactivate();
+      settingsButtonBlueMinus.deactivate();
+      serverModeSelectButton.deactivate();
+      clientModeSelectButton.deactivate();
+      multiplayerStopButton.deactivate();
+      resetButton.deactivate();
+      fill(#000000);
+      strokeJoin(ROUND);
+      rect(40, 40, width-80, height-80);
+      textAlign(CENTER, CENTER);
+      fill(#ffffff);
+      text("SERVER WIRD GESTARTET...", width/2, height/2);
+    }
+    
+    else if (clientModeSelectButton.isPressed())
+    {
+      settingsButtonRedPlus.deactivate();
+      settingsButtonRedMinus.deactivate();
+      settingsButtonGreenPlus.deactivate();
+      settingsButtonGreenMinus.deactivate();
+      settingsButtonBluePlus.deactivate();
+      settingsButtonBlueMinus.deactivate();
+      serverModeSelectButton.deactivate();
+      clientModeSelectButton.deactivate();
+      multiplayerStopButton.deactivate();
+      resetButton.deactivate();
+      
+      if (!clientStarting)
+      {
+        if (server != null)
+        {
+          server.dispose();
+        }
+        server = null;
+        if (!startedClient())
+        {
+          clientStartError = true;
+        }
+      }
+      else
+      {
+        /*
+        fill(#000000);
+        strokeJoin(ROUND);
+        rect(40, 40, width-80, height-80);
+        textAlign(CENTER, CENTER);
+        fill(#ffffff);
+        text("VERBINDEN ZUM HOST...", width/2, height/2);
+        println("starting Client");
+        */
+      }
+      
+      if (client == null)
+      {
+        fill(#000000);
+        strokeJoin(ROUND);
+        rect(40, 40, width-80, height-80);
+        textAlign(CENTER, CENTER);
+        fill(#ffffff);
+        text("VERBINDEN ZUM HOST...", width/2, height/2);
+        println("starting Client");
+      }
+    }
+    if (clientStartError == true)
+    {
+      fill(#000000);
+      strokeJoin(ROUND);
+      rect(40, 40, width-80, height-80);
+      textAlign(CENTER, CENTER);
+      fill(#ff0000);
+      text("FEHLER, KEIN HOST GEFUNDEN!", width/2, height/2);
+      println("ERROR, Server not found!");
+      clientStartErrorOKButton.activate();
+      if (clientStartErrorOKButton.isPressed())
+      {
+        clientStartError = false;
+      }
+    }
+    
+    if (serverMode != null)
+    {
+      multiplayerStopButton.activate();
+      if (multiplayerStopButton.isPressed())
+      {
+        serverMode = null;
+        if (server != null) server.dispose();
+        if (client != null) server.dispose();
+        server = null;
+        client = null;
+      }
+    }
+    else 
+    {
+      multiplayerStopButton.deactivate();
+    }
+    
     // Reset
-    if (!reset)
+    
+    if (!reset && !serverStarting && !clientStartError)
     {
       resetButton.activate();
     }
@@ -102,13 +234,17 @@ void settings_()
       settingsButtonGreenMinus.deactivate();
       settingsButtonBluePlus.deactivate();
       settingsButtonBlueMinus.deactivate();
+      serverModeSelectButton.deactivate();
+      clientModeSelectButton.deactivate();
+      multiplayerStopButton.deactivate();
       resetButton.deactivate();
       fill(#000000);
       strokeJoin(ROUND);
       rect(40, 40, width-80, height-80);
       textAlign(LEFT, TOP);
+      fill(#ffffff);
       text("WOLLEN SIE WIRKLICH DEN GESAMTEN SPIELSTAND UNWIEDERRUFLICH LÖSCHEN?", 80, 80);
-      println("resetConfirm");
+      //println("resetConfirm");
       resetConfirmButton.activate();
       resetDeclineButton.activate();
       if (resetConfirmButton.isPressed())
@@ -124,8 +260,9 @@ void settings_()
         saveObject.setInt("backgroundColorGreen", backgroundG);
         saveObject.setInt("backgroundColorBlue", backgroundB);
         saveObject.setInt("Level", 0);
+        saveObject.setInt("topLevel", 0);
         saveJSONObject(saveObject, "data/save.json");
-        loadLevel();
+        thread("loadLevel");
         resetConfirmButton.deactivate();
         reset = false;
       }
@@ -133,38 +270,7 @@ void settings_()
       {
         reset = false;
       }
-    }
-    
-    // Multiplayer
-    textAlign(TOP, LEFT);
-    text("Multiplayer Modus", 10, 470);
-    serverModeSelectButton.activate();
-    clientModeSelectButton.activate();
-    
-    if (serverModeSelectButton.isPressed())
-    {
-      if (client != null)
-      {
-        client.dispose();
-      }
-      server = new WebsocketServer(this, 8025, "/pointmaze");
-      client = null;
-      serverModeSelectButton.setFillColor(#0000ff);
-      clientModeSelectButton.setFillColor(#000000);
-      serverMode = "server";
-    }
-    else if (clientModeSelectButton.isPressed())
-    {
-      if (server != null)
-      {
-        server.dispose();
-      }
-      server = null;
-      client = new WebsocketClient(this, "ws://192.168.1.3:8025/pointmaze");
-      serverModeSelectButton.setFillColor(#000000);
-      clientModeSelectButton.setFillColor(#0000ff);
-      serverMode = "client";
-    }
+    } //<>//
   }
   
   if(pause && !settings && !start)
@@ -188,8 +294,33 @@ void settings_()
   }
 }
 
-
-void resetConfirm()
+void startWebSocketsServer()
 {
-  
+  serverStarting = true;
+  server = new WebsocketServer(this, 8025, "/pointmaze");
+  serverMode = "server";
+  serverStarting = false;
+}
+
+void startWebSocketsClient()
+{
+  clientStarting = true;
+  client = new WebsocketClient(this, "ws://192.168.1.1:8025/pointmaze");
+  serverMode = "client";
+  clientStarting = false;
+}
+
+boolean startedClient()
+{
+  if (isServerRunning("192.168.1.1"))
+  {
+    thread("startClient");
+    return true;
+  }
+  else
+  {
+    println("ERROR, Server not availible");
+    serverMode = null;
+    return false;
+  }
 }

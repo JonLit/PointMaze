@@ -2,16 +2,24 @@
  Mit freundlicher Unterstützung von Kai Krull*/
 
 import websockets.*;
+import java.net.*;
 
 //Variablen
 float cX;
 float cY;
+float vX;
+float vY;
+float abstand;
 float[] cClientX = new float[2];
 float[] cClientY = new float[2];
 boolean start = true;
 boolean debug = false;
 boolean settings = false;
 boolean reset = false;
+boolean serverStarting;
+boolean clientStarting;
+boolean clientStartError = false;
+boolean imagesLoaded = false;
 color tStrokeColor = #00ff00;
 color tFillColor = #00ff00;
 color hStrokeColor = #ff0000;
@@ -23,21 +31,23 @@ int backgroundG = 0;
 int backgroundB = 0;
 int timer = 0;
 int win = 0;
-int q = 30;
+int q = 60;
 int s = 25;
 int cRadius;
-String serverMode = "";
+String serverMode = null;
 String serverAdress = "192.168.1.1";
 PImage a;
 PImage b;
 PImage c;
 PImage icon;
 PImage cursor;
-button settingsButton;
-button pauseButton;
-button resetButton;
-button resetConfirmButton;
-button resetDeclineButton;
+Button settingsButton;
+Button pauseButton;
+Button mainMenuButton;
+Button resetButton;
+Button resetConfirmButton;
+Button resetDeclineButton;
+Button clientStartErrorOKButton;
 
 WebsocketServer server;
 WebsocketClient client;
@@ -50,45 +60,53 @@ JSONObject saveObject = new JSONObject();
 JSONObject loadObject = new JSONObject();
 
 ArrayList<Level> levels = new ArrayList<Level>();
+ArrayList<LevelTile> levelTiles = new ArrayList<LevelTile>();
 int level = 0;
+int topLevel = 0;
+
 
 void setup()
 {
-  loadLevel();
-  
-  //fullScreen();
-  size(1920, 1080);
+  thread("loadLevel");
+  thread("loadImages");
+  do 
+  {
+    background(0);
+    textAlign(CENTER, CENTER);
+    textSize(32);
+    fill(#990000);
+    text("LOADING...", width/2, height/2);
+  }
+  while(!imagesLoaded); //<>//
+  fullScreen();
+  //size(1920, 1080);
   frameRate(q);
   reset();
   orientation(LANDSCAPE);
-  icon = loadImage("icon.png");
   surface.setIcon(icon);
-  cursor = loadImage("cursor.png");
   cursor(cursor);
 
   if (displayWidth == 1280)
   {
     s = 25;
-  } else if (displayWidth == 1920)
+  } 
+  else if (displayWidth == 1920)
   {
     s = 35;
   }
-  //else if (displayWidth == )
 
   cRadius = int(s);
-
-  a = loadImage("settings_button.png");
-  a.resize(2*s, 2*s);
-  /*b = loadImage("background.jpg");
-  b.resize(displayWidth, displayHeight);*/
   
   // BUTTONS
-  settingsButton = new button(width-200, 0, 100, 100, "settings_button.png", 1);
-  pauseButton = new button(width-100, 0, 100, 100, "pause_button_running.png", 1);
+  settingsButton = new Button(width-200, 0, 100, 100, "settings_button.png", 1);
+  pauseButton = new Button(width-100, 0, 100, 100, "pause_button_running.png", 1);
+  mainMenuButton = new Button(0, 0, 100, 100, "backButton.png", 1);
 
-  resetButton = new button(50, height-150, 1000, 100, color(#000000), color(#ffffff), color(#ffffff), "GESAMTEN SPIELFORTSCHRITT LÖSCHEN");
-  resetConfirmButton = new button(width-380, height-180, 300, 100, color(#000000), color(#ffffff), color(#ffffff), "JA, LÖSCHEN");
-  resetDeclineButton = new button(width-720, height-180, 300, 100, color(#000000), color(#ffffff), color(#ffffff), "NICHT LÖSCHEN");
+  resetButton = new Button(50, height-150, 1000, 100, color(#000000), color(#ffffff), color(#ffffff), "GESAMTEN SPIELFORTSCHRITT LÖSCHEN");
+  resetConfirmButton = new Button(width-380, height-180, 300, 100, color(#000000), color(#ffffff), color(#ffffff), "JA, LÖSCHEN");
+  resetDeclineButton = new Button(width-720, height-180, 300, 100, color(#000000), color(#ffffff), color(#ffffff), "NICHT LÖSCHEN");
+  
+  clientStartErrorOKButton = new Button(width-380, height-180, 300, 100, color(#000000), color(#ffffff), color(#ffffff), "OK");
   
   ArrayList<Hindernis> h0 = new ArrayList<Hindernis>();
   ArrayList<Hindernis> h1 = new ArrayList<Hindernis>();
@@ -185,9 +203,9 @@ void draw()
   if (settings == false && pause == false && start == false)
   {
 
-    float vX = cX - mouseX;
-    float vY = cY - mouseY;
-    float abstand = sqrt(vX * vX + vY * vY);
+    vX = cX - mouseX;
+    vY = cY - mouseY;
+    abstand = sqrt(vX * vX + vY * vY);
 
     timer++;
     if (timer == 59)
@@ -231,7 +249,8 @@ void draw()
     if (level < levels.size()-1)
     {
       level++;
-      saveLevel();
+      topLevel++;
+      thread("saveLevel");
     }
     reset();
   }
@@ -249,16 +268,28 @@ void draw()
   fill(cFillColor);
   stroke(cStrokeColor);
   ellipse(cX, cY, 0.5*s, 0.5*s);
+  if (debug)
+  {
+    stroke(255);
+    fill(255);
+    strokeWeight(3);
+    line(mouseX, mouseY, cX + vX / abstand / abstand * 2500, cY + vY / abstand / abstand * 2500);
+  }
   
   // Kreise von Mitspielern
-  fill(#550000);
-  stroke(#ffffff);
-  if (cClientX != null)
+  if (serverMode != null)
   {
-    for (int i = 0; i < cClientX.length; i++)
+    fill(55, 0, 0, 40);
+    stroke(255, 40);
+    if (cClientX != null)
     {
-      ellipse(cClientX[i], cClientY[i], 0.5*s, 0.5*s);
+      for (int i = 0; i < cClientX.length; i++)
+      {
+        ellipse(cClientX[i], cClientY[i], 0.5*s, 0.5*s);
+      }
     }
+    fill(0, 0, 0, 255);
+    stroke(0, 255);
   }
 
   if (win > 0)
@@ -284,13 +315,25 @@ void draw()
     pauseButton.activate();
   }
   
-  if (pause == true && !start)
+  if (!start && !settings && !pause)
+  {
+    mainMenuButton.activate();
+    if (mainMenuButton.isPressed())
+    {
+      start = true;
+    }
+  }
+  
+  if (pause && !start && !serverStarting && !clientStartError && !reset)
   {
     settingsButton.activate();
   }
   
   if (debug == true)
   {
+    fill(255);
+    textSize(20);
+    textAlign(TOP, LEFT);
     text(timer, 10, 20);
   }
   
@@ -311,6 +354,10 @@ void draw()
   {
     client.sendMessage(str(cX) + ";" + str(cY));
   }
+  
+  // Connection Error Handling (hopefully)
+  //WebsocketServerEvents.handleError(java.net.BindException e);
+  //WebsocketClientEvents.onError(java.net.ConnectException);
 }
 
 void webSocketEvent(String msg)
@@ -372,4 +419,38 @@ void mousePressed()
       settings = !settings;
     }
   }
+}
+
+void loadImages()
+{
+  a = loadImage("settings_button.png");
+  a.resize(2*s, 2*s);
+  /*b = loadImage("background.jpg");
+  b.resize(displayWidth, displayHeight);*/
+  cursor = loadImage("cursor.png");
+  icon = loadImage("icon.png");
+  imagesLoaded = true;
+}
+
+
+boolean isServerRunning(String host)
+{
+  // Assume no connection is possible.
+  boolean result = false;
+
+  try {
+    (new Socket(host, 8025)).close();
+    result = true;
+  }
+  catch(SocketException e) 
+  {
+    // Could not connect.
+  }
+  catch(Exception e)
+  {
+    println("Other error while checking Serveravailibility: ");
+    e.printStackTrace();
+  }
+
+  return result;
 }

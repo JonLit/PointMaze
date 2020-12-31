@@ -12,6 +12,7 @@ void loadLevel()
   backgroundG = loadObject.getInt("backgroundColorGreen");
   backgroundB = loadObject.getInt("backgroundColorBlue");
   level = loadObject.getInt("Level");
+  topLevel = loadObject.getInt("topLevel");
   
   
   //  OLD LOADING SYSTEM

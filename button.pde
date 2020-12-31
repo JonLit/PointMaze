@@ -1,4 +1,4 @@
-class button //<>//
+class Button //<>//
 {
   public int x;
   public int y;
@@ -22,7 +22,7 @@ class button //<>//
   
   public boolean active;
   
-  button(int PosX, int PosY, int buttonWidth, int buttonHeight, color fillColor, color strokeColor, color textColor, String text)
+  Button(int PosX, int PosY, int buttonWidth, int buttonHeight, color fillColor, color strokeColor, color textColor, String text)
   {
     this.x = PosX;
     this.y = PosY;
@@ -39,7 +39,7 @@ class button //<>//
     noFill = false;
     noStroke = false;
   }
-  button(int PosX, int PosY, int buttonWidth, int buttonHeight, color strokeColor, String text)
+  Button(int PosX, int PosY, int buttonWidth, int buttonHeight, color strokeColor, String text)
   {
     this.x = PosX;
     this.y = PosY;
@@ -54,7 +54,7 @@ class button //<>//
     noFill = true;
     noStroke = false;
   }
-  button(int PosX, int PosY, int buttonWidth, int buttonHeight, String text)
+  Button(int PosX, int PosY, int buttonWidth, int buttonHeight, String text)
   {
     this.x = PosX;
     this.y = PosY;
@@ -68,7 +68,7 @@ class button //<>//
     noFill = true;
     noStroke = true;
   }
-  button(int PosX, int PosY, int buttonWidth, int buttonHeight, color fillColor, color strokeColor, String symbolName)
+  Button(int PosX, int PosY, int buttonWidth, int buttonHeight, color fillColor, color strokeColor, String symbolName)
   {
     this.x = PosX;
     this.y = PosY;
@@ -85,7 +85,7 @@ class button //<>//
     noFill = false;
     noStroke = false;
   }
-  button(int PosX, int PosY, int buttonWidth, int buttonHeight, color strokeColor, String symbolName, int mode)
+  Button(int PosX, int PosY, int buttonWidth, int buttonHeight, color strokeColor, String symbolName, int mode)
   {
     this.x = PosX;
     this.y = PosY;
@@ -101,7 +101,7 @@ class button //<>//
     noFill = true;
     noStroke = false;
   }
-  button(int PosX, int PosY, int buttonWidth, int buttonHeight, String symbolName, int mode)
+  Button(int PosX, int PosY, int buttonWidth, int buttonHeight, String symbolName, int mode)
   {
     this.x = PosX;
     this.y = PosY;

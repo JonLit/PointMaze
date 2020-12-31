@@ -11,6 +11,7 @@ void saveLevel()
   saveObject.setInt("backgroundColorGreen", backgroundG);
   saveObject.setInt("backgroundColorBlue", backgroundB);
   saveObject.setInt("Level", level);
+  saveObject.setInt("topLevel", topLevel);
   saveJSONObject(saveObject, "data/save.json");
 
   //  OLD SAVE SYSTEM
