@@ -1,4 +1,4 @@
-/* Ersteller: Jonathan Litzelmann
+/* Ersteller: Jonathan Litzelmann //<>// //<>// //<>//
  Mit freundlicher Unterstützung von Kai Krull*/
 
 import websockets.*;
@@ -18,7 +18,9 @@ boolean settings = false;
 boolean reset = false;
 boolean serverStarting;
 boolean clientStarting;
+boolean startedClient;
 boolean clientStartError = false;
+boolean gettingAddress = false;
 boolean imagesLoaded = false;
 color tStrokeColor = #00ff00;
 color tFillColor = #00ff00;
@@ -34,8 +36,12 @@ int win = 0;
 int q = 60;
 int s = 25;
 int cRadius;
+int tryingAddressNumber;
+int timeNow;
 String serverMode = null;
-String serverAdress = "192.168.1.1";
+String serverAddress = "192.168.1.1";
+String foundAddress = null;
+String tryingAddress = "";
 PImage a;
 PImage b;
 PImage c;
@@ -51,6 +57,7 @@ Button clientStartErrorOKButton;
 
 WebsocketServer server;
 WebsocketClient client;
+ServerSocket testServer;
 
 
 //String[] save = new String[12];
@@ -77,7 +84,7 @@ void setup()
     fill(#990000);
     text("LOADING...", width/2, height/2);
   }
-  while(!imagesLoaded); //<>//
+  while(!imagesLoaded);
   fullScreen();
   //size(1920, 1080);
   frameRate(q);
@@ -249,7 +256,7 @@ void draw()
     if (level < levels.size()-1)
     {
       level++;
-      topLevel++;
+      if (level == topLevel-1)  topLevel++;
       thread("saveLevel");
     }
     reset();
@@ -348,16 +355,42 @@ void draw()
   // Multiplayer stuff
   if (serverMode == "server")
   {
-    server.sendMessage(str(cX) + ";" + str(cY));
+    try 
+    {
+      server.sendMessage(str(cX) + ";" + str(cY));
+    }
+    catch (Exception e)
+    {
+      serverMode = null;
+      try 
+      {
+        if (server != null) server.dispose();
+        if (client != null) server.dispose();
+      }
+      catch (Exception f){}
+      server = null;
+      client = null;
+    }
   }
   else if (serverMode == "client")
   {
-    client.sendMessage(str(cX) + ";" + str(cY));
+    try 
+    {
+      client.sendMessage(str(cX) + ";" + str(cY));
+    }
+    catch (Exception e)
+    {
+      serverMode = null;
+      try 
+      {
+        if (server != null) server.dispose();
+        if (client != null) server.dispose();
+      }
+      catch (Exception f){}
+      server = null;
+      client = null;
+    }
   }
-  
-  // Connection Error Handling (hopefully)
-  //WebsocketServerEvents.handleError(java.net.BindException e);
-  //WebsocketClientEvents.onError(java.net.ConnectException);
 }
 
 void webSocketEvent(String msg)
@@ -438,8 +471,9 @@ boolean isServerRunning(String host)
   // Assume no connection is possible.
   boolean result = false;
 
-  try {
-    (new Socket(host, 8025)).close();
+  try 
+  {
+    (new Socket(host, 8026)).close();
     result = true;
   }
   catch(SocketException e) 
@@ -453,4 +487,115 @@ boolean isServerRunning(String host)
   }
 
   return result;
+}
+
+void startClient()
+{
+  serverAddress = getServerAddress();
+  if (serverAddress != null && isServerRunning(serverAddress))
+  {
+    thread("startWebSocketsClient");
+    startedClient =  true;
+  }
+  else
+  {
+    println("ERROR, Server not availible");
+    serverMode = null;
+    startedClient =  false;
+    clientStartError = true;
+    clientStarting = false;
+  }
+}
+
+String getServerAddress()
+{
+  gettingAddress = true;
+  Socket socket = new Socket();
+  for (int i = 0; i < 256 || foundAddress != null; i++)
+  {
+    for (int j = 0; j < 256 || foundAddress != null; j++)
+    {
+      tryHost(socket, i, j);
+      if (foundAddress != null)
+      {
+        return foundAddress;
+      }
+    }
+  }
+  try //<>//
+  { //<>//
+    socket.connect(new InetSocketAddress("127.0.0.1", 8026), 10); //<>// //<>//
+    socket.close(); //<>//
+    println("found running PointMaze Server at localhost"); //<>//
+    return "127.0.0.1"; //<>//
+  } //<>//
+  catch (Exception e) //<>//
+  {
+    println("sadly didnt even found a running PointMaze server at localhost");
+    try
+    {
+      socket.close();
+    }
+    catch (Exception f)
+    {
+      println("something went terribly wrong!");
+      f.printStackTrace();
+    }
+  }
+  
+  gettingAddress = false;
+  println("SERVER NOT FOUND");
+  return null;
+}
+
+void tryHost(Socket socket, int i, int j)
+{
+  try 
+  {
+    socket = new Socket();
+    tryingAddress = "192.168." + str(i) + "." + str(j);
+    tryingAddressNumber++;
+    socket.connect(new InetSocketAddress("192.168." + str(i) + "." + str(j), 8026), 10);
+    socket.close();
+    println("found running PointMaze Server at 192.168." + str(i) + "." + str(j));
+    gettingAddress = false;
+    foundAddress =  "192.168." + str(i) + "." + str(j);
+  }
+  catch (Exception e)
+  {
+    /*println("checked 192.168." + str(i) + "." + str(j) + " for running PointMaze server, but nothing found");
+    try
+    {
+      socket.close();
+    }
+    catch (Exception f)
+    {
+      f.printStackTrace();
+      println("something went terribly wrong");
+    }*/
+  }
+}
+
+void startWebSocketsServer()
+{
+  serverStarting = true;
+  server = new WebsocketServer(this, 8025, "/pointmaze");
+  try
+  {
+    testServer = new ServerSocket(8026);
+    println("testServer started");
+  }
+  catch (Exception e)
+  {
+    e.printStackTrace();
+  }
+  serverMode = "server";
+  serverStarting = false;
+}
+
+void startWebSocketsClient()
+{
+  client = new WebsocketClient(this, "ws://" + serverAddress + ":8025/pointmaze");
+  serverMode = "client";
+  clientStarting = false;
 }

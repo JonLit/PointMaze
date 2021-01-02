@@ -136,6 +136,7 @@ void settings_()
     
     else if (clientModeSelectButton.isPressed())
     {
+      
       settingsButtonRedPlus.deactivate();
       settingsButtonRedMinus.deactivate();
       settingsButtonGreenPlus.deactivate();
@@ -147,42 +148,34 @@ void settings_()
       multiplayerStopButton.deactivate();
       resetButton.deactivate();
       
-      if (!clientStarting)
+      if (!clientStarting && !startedClient)
       {
         if (server != null)
         {
           server.dispose();
         }
         server = null;
-        if (!startedClient())
-        {
-          clientStartError = true;
-        }
-      }
-      else
-      {
-        /*
-        fill(#000000);
-        strokeJoin(ROUND);
-        rect(40, 40, width-80, height-80);
-        textAlign(CENTER, CENTER);
-        fill(#ffffff);
-        text("VERBINDEN ZUM HOST...", width/2, height/2);
-        println("starting Client");
-        */
-      }
-      
-      if (client == null)
-      {
-        fill(#000000);
-        strokeJoin(ROUND);
-        rect(40, 40, width-80, height-80);
-        textAlign(CENTER, CENTER);
-        fill(#ffffff);
-        text("VERBINDEN ZUM HOST...", width/2, height/2);
-        println("starting Client");
+        clientStarting = true;
+        thread("startClient");
       }
     }
+    
+    if (gettingAddress)
+    {
+      
+      if (tryingAddressNumber == 1)
+      {
+        timeNow = millis();
+      }
+      fill(#000000);
+      strokeJoin(ROUND);
+      rect(40, 40, width-80, height-80);
+      textAlign(CENTER, CENTER);
+      fill(#ffffff);
+      text("VERBINDEN ZUM HOST...\nBITTE NICHT AUF DEN BILDSCHIRM TIPPEN\nDER PROZESS KANN EINIGE ZEIT IN ANSPRUCH NEHMEN\n\ndurchsuche Addresse " + tryingAddress + "\n(" + tryingAddressNumber + " von 65 536)\n" + str((millis() - timeNow) / 1000), width/2, height/2);
+      //println("starting Client");
+    }
+    
     if (clientStartError == true)
     {
       fill(#000000);
@@ -191,7 +184,7 @@ void settings_()
       textAlign(CENTER, CENTER);
       fill(#ff0000);
       text("FEHLER, KEIN HOST GEFUNDEN!", width/2, height/2);
-      println("ERROR, Server not found!");
+      //println("ERROR, Server not found!");
       clientStartErrorOKButton.activate();
       if (clientStartErrorOKButton.isPressed())
       {
@@ -205,8 +198,11 @@ void settings_()
       if (multiplayerStopButton.isPressed())
       {
         serverMode = null;
-        if (server != null) server.dispose();
-        if (client != null) server.dispose();
+        try 
+        {
+          if (server != null) server.dispose();
+          if (client != null) server.dispose();
+        }catch (Exception e){}
         server = null;
         client = null;
       }
@@ -218,7 +214,7 @@ void settings_()
     
     // Reset
     
-    if (!reset && !serverStarting && !clientStartError)
+    if (!reset && !serverStarting && !clientStartError && !clientStarting)
     {
       resetButton.activate();
     }
@@ -260,7 +256,7 @@ void settings_()
         saveObject.setInt("backgroundColorGreen", backgroundG);
         saveObject.setInt("backgroundColorBlue", backgroundB);
         saveObject.setInt("Level", 0);
-        saveObject.setInt("topLevel", 0);
+        saveObject.setInt("topLevel", 2);
         saveJSONObject(saveObject, "data/save.json");
         thread("loadLevel");
         resetConfirmButton.deactivate();
@@ -291,36 +287,5 @@ void settings_()
       textSize(10);
       text(round(frameRate), 0, 10);
     }
-  }
-}
-
-void startWebSocketsServer()
-{
-  serverStarting = true;
-  server = new WebsocketServer(this, 8025, "/pointmaze");
-  serverMode = "server";
-  serverStarting = false;
-}
-
-void startWebSocketsClient()
-{
-  clientStarting = true;
-  client = new WebsocketClient(this, "ws://192.168.1.1:8025/pointmaze");
-  serverMode = "client";
-  clientStarting = false;
-}
-
-boolean startedClient()
-{
-  if (isServerRunning("192.168.1.1"))
-  {
-    thread("startClient");
-    return true;
-  }
-  else
-  {
-    println("ERROR, Server not availible");
-    serverMode = null;
-    return false;
   }
 }
