@@ -17,7 +17,7 @@ ab Android 8.0
 2. PointMaze.apk öffnen
 3. Unbek. Apps installieren aktivieren*
 4. PointMaze installieren
-(5. Unbek. Apps installieren deaktivieren)
+5. Wer will kann jetzt wieder Unbek. Apps installieren deaktivieren
 
 *Android lässt aus Sicherheitsgründen standardmäßig keiner App (außer Google PlayStore) die Installation von Apps zu.
 
@@ -39,3 +39,14 @@ macOS:
 
 
 PointMaze wird leider nicht in absehbarer Zeit für iOS verfügbar sein, da Java leider nicht von iOS unterstützt wird.
+
+# Multiplayer
+Allgemeines:
+Der Multiplayer funktioniert im Moment nur mit maximal 2 Geräten einwandfrei.
+Bei 3 oder mehr geräten sieht nur der Host alle Mitspieler. Da das nicht mit geringem Aufwand zu ändern ist, wird das auch erstmal so bleiben.
+
+Anleitung:
+Um mit mehreren Geräten zu spielen, müssen alle Geräte im gleichen WLAN / LAN sein, Hotspots funktionieren auch.
+Einer der Spieler muss in den Einstellungen von PointMaze (Pause -> Einstellungen) in den Server Modus wechseln, dadurch wird ein Server auf diesem Gerät gestartet, mit dem sich die anderen Geräte verbinden können.
+Die anderen Spieler müssen in den Einstellungen in den Client Modus wechseln. Es öffnet sich ein Fenster, in dem informationen über die automatische serversuche gezeigt werden (kann etwas dauern bis der server gefunden wird, ein Host mit der IP 192.168.0.0 wird sofort gefunden, ein Host mit der IP 192.168.255.255 wird erst nach einigen Minuten gefunden, leider kann ich das nicht verschnellern.
+Wenn der Host gefunden wurde, schließt sich dieses Fenster von selber, und wenn man wieder aus den Einstellungen in das Spiel wechselt, werden die Kreise von den Mitspielern als Dunkelrote, weiß umrandete, halbdurchsichtige Kreise dargestellt.
