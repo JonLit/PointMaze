@@ -555,7 +555,7 @@ void tryHost(Socket socket, int i, int j)
     socket = new Socket();
     tryingAddress = "192.168." + str(i) + "." + str(j);
     tryingAddressNumber++;
-    socket.connect(new InetSocketAddress("192.168." + str(i) + "." + str(j), 8026), 10);
+    socket.connect(new InetSocketAddress("192.168." + str(i) + "." + str(j), 8026), 100);
     socket.close();
     println("found running PointMaze Server at 192.168." + str(i) + "." + str(j));
     gettingAddress = false;
