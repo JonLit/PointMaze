@@ -1,6 +1,6 @@
 # PointMaze
 
-Ein kleines Spiel für Android-Geräte, PCs und Macs
+Ein kleines Spiel für Windows, Linux, Mac und Android
 
 # Installationsanleitung:
 
@@ -38,7 +38,7 @@ macOS:
 3. Point_Maze_PC.app ausführen
 
 
-PointMaze wird leider nicht in absehbarer Zeit für iOS verfügbar sein, da Java leider nicht von iOS unterstützt wird.
+PointMaze wird leider nicht in absehbarer Zeit für iOS verfügbar sein, da Java leider nicht von iOS unterstützt wird und Ich mit den Lizenzbedingungen von Apples AppStore nicht einverstanden bin.
 
 # Multiplayer
 Allgemeines:
